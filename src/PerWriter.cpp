@@ -16,10 +16,21 @@ PerWriter::PerWriter() {}
 
 PerWriter::~PerWriter() {}
 
+void PerWriter::writeRule(ofstream &ofs, vector<Condition> c) {
+	ofs << "(defrule" << endl;
+	ofs << "\t(true)" << endl;
+	ofs << "=>" << endl;
+	ofs << "\t(do-nothing)" << endl;
+	ofs << ")" << endl;
+}
+
 void PerWriter::write(string fname, shared_ptr<Graph> g) {
 	ofstream ofs(fname);
 
-	ofs << "defrule(true)" << endl;
+
+	vector<Condition> cds;
+	writeRule(ofs, cds);
+
 }
 
 } /* namespace std */

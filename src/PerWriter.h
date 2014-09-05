@@ -10,16 +10,22 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "Graph.h"
 
 namespace std {
+	
+struct Condition {
+	int type;
+};
 
 class PerWriter {
 public:
 	PerWriter();
 	virtual ~PerWriter();
 
+	void writeRule(ofstream &, vector<Condition>);
 	void write(string, shared_ptr<Graph>);
 };
 

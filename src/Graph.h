@@ -15,8 +15,10 @@
 namespace std {
 
 struct Node {
-	int id;
+	unsigned int id;
 	string label;
+
+	// not needed
 	double value;
 };
 
@@ -24,6 +26,8 @@ struct Flow {
 	string from;
 	string to;
 	double rate;
+
+	// not needed
 	double cost;
 	bool control;
 };
@@ -38,12 +42,15 @@ public:
 	void add(Node);
 	void add(Flow);
 
+	vector<Flow> getOutgoing(Node &);
+	double getFeedback(Node &);
+	vector<double> check(vector<double>, vector<double>);
 	void getPoint(Flow);
 
+
+
 	map<string, double> getValues();
-
 	void run();
-
 	void printState();
 
 private:

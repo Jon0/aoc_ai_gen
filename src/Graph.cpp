@@ -22,6 +22,7 @@ Node *Graph::getNode(string label) {
 }
 
 void Graph::add(Node n) {
+	n.id = nodes.size();
 	nodes.push_back(n);
 }
 
@@ -29,23 +30,62 @@ void Graph::add(Flow f) {
 	flows.push_back(f);
 }
 
-map<string, double> Graph::getValues() {
-	map<string, double> next_values;
-	for (Node &n: nodes) {
-		next_values.insert(map<string, double>::value_type(n.label, n.value));
+vector<Flow> Graph::getOutgoing(Node &n) {
+	vector<Flow> flist;
+	for (Flow &f : flows) {
+		if (f.from == n.label) {
+			flist.push_back(f);
+		}
 	}
-	return next_values;
+	return flist;
+}
+
+double Graph::getFeedback(Node &n) {
+	vector<double> rates;
+	for (Node &n : nodes) rates.push_back(0.0);
+
+	vector<Node *> reach;
+	reach.push_back(&n);
+
+	for (int i = 0; i < 50; ++i) {
+		vector<Flow> fs;
+		for (Node *n : reach) {
+			vector<Flow> insert = getOutgoing(*n);
+			fs.insert(fs.end(), insert.begin(), insert.end());
+		}
+		reach.clear();
+		for (Flow &f : fs) {
+			unsigned int index = getNode(f.to)->id;
+			rates[index] += f.rate;
+			reach.push_back(getNode(f.to));
+		}
+	}
+	return rates[n.id];
+}
+
+// cost and value have length equal to number of nodes
+vector<double> Graph::check(vector<double> cost, vector<double> value) {
+	vector<double> diff;
+	for (Node &n : nodes) diff.push_back(0.0);
+	for (int i = 0; i < nodes.size(); ++i) {
+		diff[i] -= cost[i] * getFeedback(nodes[i]);
+		diff[i] += value[i] * getFeedback(nodes[i]);
+	}
+	return diff;
 }
 
 void Graph::getPoint(Flow f) {
 	// weighting on each node
-	// decision made if sum >= 0
+	// decision made if sum >= bias
 	vector<double> weights;
+}
 
-
-
-
-
+map<string, double> Graph::getValues() {
+	map<string, double> next_values;
+	for (Node &n : nodes) {
+		next_values.insert(map<string, double>::value_type(n.label, n.value));
+	}
+	return next_values;
 }
 
 void Graph::run() {
