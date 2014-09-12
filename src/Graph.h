@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "Action.h"
+
 namespace std {
 
 struct Node {
@@ -41,21 +43,30 @@ public:
 
 	void add(Node);
 	void add(Flow);
+	void add(Action);
 
+	vector<Action> &actions();
 	vector<Flow> getOutgoing(Node &);
 	double getFeedback(Node &);
-	vector<double> check(vector<double>, vector<double>);
+
+
+	vector<double> getUtility(Action &);
+	vector<double> getUtility(vector<double>, vector<double>);
 	void getPoint(Flow);
 
 
 
 	map<string, double> getValues();
 	void run();
+
 	void printState();
 
 private:
 	vector<Node> nodes;
 	vector<Flow> flows;
+	vector<Action> actions_list;
+
+
 };
 
 } /* namespace std */

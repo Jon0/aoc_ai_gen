@@ -30,6 +30,14 @@ void Graph::add(Flow f) {
 	flows.push_back(f);
 }
 
+void Graph::add(Action a) {
+	actions_list.push_back(a);
+}
+
+vector<Action> &Graph::actions() {
+	return actions_list;
+}
+
 vector<Flow> Graph::getOutgoing(Node &n) {
 	vector<Flow> flist;
 	for (Flow &f : flows) {
@@ -63,8 +71,21 @@ double Graph::getFeedback(Node &n) {
 	return rates[n.id];
 }
 
+vector<double> Graph::getUtility(Action &a) {
+	vector<double> c, v;
+	c.resize( nodes.size() );
+	v.resize( nodes.size() );
+	for (Quantity &q: a.cost) {
+		c[getNode(q.node_name)->id] = q.amount;
+	}
+	for (Quantity &q: a.value) {
+		v[getNode(q.node_name)->id] = q.amount;
+	}
+	return getUtility(c, v);
+}
+
 // cost and value have length equal to number of nodes
-vector<double> Graph::check(vector<double> cost, vector<double> value) {
+vector<double> Graph::getUtility(vector<double> cost, vector<double> value) {
 	vector<double> diff;
 	for (Node &n : nodes) diff.push_back(0.0);
 	for (int i = 0; i < nodes.size(); ++i) {
@@ -112,6 +133,9 @@ void Graph::run() {
 void Graph::printState() {
 	for (Node &n: nodes) {
 		cout << n.label << " = " << n.value << endl;
+	}
+	for (Action &a: actions_list) {
+		cout << "action " << a.effect << endl;
 	}
 }
 

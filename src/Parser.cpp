@@ -65,6 +65,26 @@ shared_ptr<Graph> Parser::readGraph(string fname) {
 			if (f.cost > 0) f.control = true;
 			g->add(f);
 		}
+		else if (tokens[i] == "action") {
+			Action a;
+
+			string next = tokens[++i];
+			while (next != "time") {
+				if (!a.effect.empty()) a.effect += " ";
+				a.effect += next;
+				next = tokens[++i];
+			}
+			a.time = atof(tokens[++i].c_str());
+			i++;
+
+			next = tokens[++i];
+			while (next != "value") {
+				double amount = atof(tokens[++i].c_str());
+				a.cost.push_back(Quantity{next, amount});
+				next = tokens[++i];
+			}
+			g->add(a);
+		}
 	}
 	return g;
 }

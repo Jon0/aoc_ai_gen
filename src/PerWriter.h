@@ -12,10 +12,11 @@
 #include <string>
 #include <vector>
 
+#include "Action.h"
 #include "Graph.h"
 
 namespace std {
-	
+
 struct Condition {
 	int type;
 };
@@ -25,7 +26,7 @@ public:
 	PerWriter();
 	virtual ~PerWriter();
 
-	void writeRule(ofstream &, vector<Condition>);
+	void writeRule(ofstream &, vector<Condition>, vector<Action>);
 	void write(string, shared_ptr<Graph>);
 };
 
