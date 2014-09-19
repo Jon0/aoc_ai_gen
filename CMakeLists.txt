@@ -7,6 +7,7 @@ set (Test_VERSION_MINOR 0)
 
 file(GLOB SRC_FILES
     "src/*.cpp"
+    "src/parser/*.cpp"
 )
 
 add_definitions(-std=c++11)

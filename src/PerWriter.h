@@ -26,7 +26,7 @@ public:
 	PerWriter();
 	virtual ~PerWriter();
 
-	void writeRule(ofstream &, vector<Condition>, vector<Action>);
+	void writeRule(ofstream &, map<Node *, double> &, Action &);
 	void write(string, shared_ptr<Graph>);
 };
 

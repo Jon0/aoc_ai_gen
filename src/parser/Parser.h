@@ -9,20 +9,33 @@
 #define PARSER_H_
 
 #include <memory>
+#include <queue>
 #include <string>
 #include <vector>
 
-#include "Graph.h"
+#include "../Graph.h"
 
 namespace std {
 
 class Parser {
 public:
-	Parser();
+	Parser(string);
 	virtual ~Parser();
 
-	vector<string> readTokens(string);
-	shared_ptr<Graph> readGraph(string);
+	shared_ptr<Graph> readGraph();
+
+private:
+	string filename;
+	queue<string> tokens;
+
+	Node readNode();
+	Flow readFlow();
+	Action readAction();
+
+
+	void match(string);
+	string pop();
+	double popf();
 
 };
 

@@ -19,19 +19,12 @@ namespace std {
 struct Node {
 	unsigned int id;
 	string label;
-
-	// not needed
-	double value;
 };
 
 struct Flow {
 	string from;
 	string to;
 	double rate;
-
-	// not needed
-	double cost;
-	bool control;
 };
 
 class Graph {
@@ -39,34 +32,24 @@ public:
 	Graph();
 	virtual ~Graph();
 
-	Node *getNode(string label);
-
 	void add(Node);
 	void add(Flow);
 	void add(Action);
 
 	vector<Action> &actions();
-	vector<Flow> getOutgoing(Node &);
-	double getFeedback(Node &);
-
-
-	vector<double> getUtility(Action &);
-	vector<double> getUtility(vector<double>, vector<double>);
-	void getPoint(Flow);
-
-
-
-	map<string, double> getValues();
-	void run();
+	map<Node *, double> getUtility(Action &);
 
 	void printState();
 
 private:
+	Node *getNode(string label);
+	vector<Flow> getOutgoing(Node &);
+	double getFeedback(Node &);
+	vector<double> getUtility(vector<double>, vector<double>);
+
 	vector<Node> nodes;
 	vector<Flow> flows;
 	vector<Action> actions_list;
-
-
 };
 
 } /* namespace std */

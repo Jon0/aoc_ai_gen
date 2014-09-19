@@ -16,22 +16,31 @@ PerWriter::PerWriter() {}
 
 PerWriter::~PerWriter() {}
 
-void PerWriter::writeRule(ofstream &ofs, vector<Condition> c, vector<Action> a) {
+void PerWriter::writeRule(ofstream &ofs, map<Node *, double> &vals, Action &a) {
+	vector<Condition> cds;
+
+	//a->
+
+	for (auto &p: vals) {
+		ofs << "# ++ " << p.first->label << " * "<< p.second << endl;
+	}
+
+
+
 	ofs << "(defrule" << endl;
 	ofs << "\t(true)" << endl;
 	ofs << "=>" << endl;
-	for (Action &act: a) {
-		ofs << "\t(" << act.effect << ")" << endl;
-	}
+	ofs << "\t(" << a.effect << ")" << endl;
 	ofs << ")" << endl;
 }
 
 void PerWriter::write(string fname, shared_ptr<Graph> g) {
 	ofstream ofs(fname);
 
-	vector<Condition> cds;
-	writeRule(ofs, cds, g->actions());
-
+	for (Action &a: g->actions()) {
+		map<Node *, double> vals = g->getUtility(a);
+		writeRule(ofs, vals, a);
+	}
 }
 
 } /* namespace std */

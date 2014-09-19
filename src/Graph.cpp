@@ -19,6 +19,7 @@ Node *Graph::getNode(string label) {
 	for (Node &n: nodes) {
 		if (n.label == label) return &n;
 	}
+	throw runtime_error(label + " not a node");
 }
 
 void Graph::add(Node n) {
@@ -55,7 +56,8 @@ double Graph::getFeedback(Node &n) {
 	vector<Node *> reach;
 	reach.push_back(&n);
 
-	for (int i = 0; i < 50; ++i) {
+	// this is really slow
+	for (int i = 0; i < 20; ++i) {
 		vector<Flow> fs;
 		for (Node *n : reach) {
 			vector<Flow> insert = getOutgoing(*n);
@@ -68,10 +70,12 @@ double Graph::getFeedback(Node &n) {
 			reach.push_back(getNode(f.to));
 		}
 	}
+
+	cout << "feedback = " << rates[n.id] << endl;
 	return rates[n.id];
 }
 
-vector<double> Graph::getUtility(Action &a) {
+map<Node *, double> Graph::getUtility(Action &a) {
 	vector<double> c, v;
 	c.resize( nodes.size() );
 	v.resize( nodes.size() );
@@ -81,7 +85,12 @@ vector<double> Graph::getUtility(Action &a) {
 	for (Quantity &q: a.value) {
 		v[getNode(q.node_name)->id] = q.amount;
 	}
-	return getUtility(c, v);
+	vector<double> vals = getUtility(c, v);
+	map<Node *, double> mapvals;
+	for (Node &n: nodes) {
+		mapvals[&n] = vals[n.id];
+	}
+	return mapvals;
 }
 
 // cost and value have length equal to number of nodes
@@ -95,44 +104,9 @@ vector<double> Graph::getUtility(vector<double> cost, vector<double> value) {
 	return diff;
 }
 
-void Graph::getPoint(Flow f) {
-	// weighting on each node
-	// decision made if sum >= bias
-	vector<double> weights;
-}
-
-map<string, double> Graph::getValues() {
-	map<string, double> next_values;
-	for (Node &n : nodes) {
-		next_values.insert(map<string, double>::value_type(n.label, n.value));
-	}
-	return next_values;
-}
-
-void Graph::run() {
-	for (int i = 0; i < 100; ++i) {
-		map<string, double> next_values = getValues();
-
-		// update each flow
-		for (Flow &f: flows) {
-			double inc = getNode(f.from)->value * f.rate;
-			next_values[f.from] -= f.cost * inc;
-			double &v = next_values[f.to];
-			v += inc;
-			if (v < 0) v = 0;
-		}
-
-		for (Node &n: nodes) {
-			n.value = next_values[n.label];
-		}
-		cout << endl;
-		printState();
-	}
-}
-
 void Graph::printState() {
 	for (Node &n: nodes) {
-		cout << n.label << " = " << n.value << endl;
+		cout << "node " << n.label << endl;
 	}
 	for (Action &a: actions_list) {
 		cout << "action " << a.effect << endl;
