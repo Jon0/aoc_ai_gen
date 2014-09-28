@@ -57,7 +57,7 @@ double Graph::getFeedback(Node &n) {
 	reach.push_back(&n);
 
 	// this is really slow
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 25; ++i) {
 		vector<Flow> fs;
 		for (Node *n : reach) {
 			vector<Flow> insert = getOutgoing(*n);

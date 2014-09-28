@@ -76,7 +76,18 @@ Action Parser::readAction() {
 		a.cost.push_back(Quantity{next, amount});
 		next = tokens.front();
 	}
+
 	match("value");
+	next = tokens.front();
+	while (next != "end") {
+		pop();
+		double amount = popf();
+		a.value.push_back(Quantity{next, amount});
+		next = tokens.front();
+	}
+	pop();
+
+	return a;
 }
 
 void Parser::match(string s) {

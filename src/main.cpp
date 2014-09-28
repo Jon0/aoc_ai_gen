@@ -6,8 +6,8 @@ using namespace std;
 int main(int argc, char *argv[]) {
 	Parser p(argv[1]);
 	shared_ptr<Graph> g = p.readGraph();
-	//g->printState();
+	g->printState();
 
-	//PerWriter w;
-	//w.write("test.per", g);
+	PerWriter w;
+	w.write("test.per", g);
 }
