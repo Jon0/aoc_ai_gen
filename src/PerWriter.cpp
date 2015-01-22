@@ -8,9 +8,19 @@
 #include <fstream>
 #include <iostream>
 
+#include "parser/Parser.h"
 #include "PerWriter.h"
 
 namespace std {
+
+void readSpecFile(const char *f) {
+	Parser p(f);
+	shared_ptr<Graph> g = p.readGraph();
+	g->printState();
+
+	PerWriter w;
+	w.write("test.per", g);
+}
 
 PerWriter::PerWriter() {}
 

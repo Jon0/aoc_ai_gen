@@ -1,10 +1,3 @@
-/*
- * PerWriter.h
- *
- *  Created on: 5/09/2014
- *      Author: remnanjona
- */
-
 #ifndef PERWRITER_H_
 #define PERWRITER_H_
 
@@ -16,6 +9,8 @@
 #include "Graph.h"
 
 namespace std {
+
+void readSpecFile(const char *);
 
 struct Condition {
 	int type;
