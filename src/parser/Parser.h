@@ -22,14 +22,14 @@ public:
 	Parser(string);
 	virtual ~Parser();
 
-	shared_ptr<Graph> readGraph();
+	shared_ptr<graph::Graph> readGraph();
 
 private:
 	string filename;
 	queue<string> tokens;
 
-	Node readNode();
-	Flow readFlow();
+	graph::Node readNode();
+	graph::Flow readFlow();
 	Action readAction();
 
 

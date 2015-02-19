@@ -1,57 +1,80 @@
-/*
- * Graph.h
- *
- *  Created on: 4/09/2014
- *      Author: remnanjona
- */
-
 #ifndef GRAPH_H_
 #define GRAPH_H_
 
+#include <functional>
 #include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include "Action.h"
 
-namespace std {
+namespace graph {
 
 struct Node {
 	unsigned int id;
-	string label;
+	std::string label;
 };
 
 struct Flow {
-	string from;
-	string to;
-	double rate;
+	std::function<double()> rate;
 };
+
+using Edge = std::pair<Node, Node>;
+
+}
+
+namespace std {
+
+std::string to_string(const graph::Node &node);
+
+std::string to_string(const graph::Edge &edge);
+
+template<> struct hash<graph::Node> {
+	typedef std::size_t result_type;
+	result_type operator()( const graph::Node &arg ) const {
+        return arg.id;
+	}
+};
+
+template<> struct hash<graph::Edge> {
+	typedef std::size_t result_type;
+	result_type operator()( const graph::Edge &arg ) const {
+		result_type const s ( std::hash<graph::Node>()(arg.first) );
+        result_type const e ( std::hash<graph::Node>()(arg.second) );
+        return s ^ (e << 1);
+	}
+};
+
+}
+
+namespace graph {
 
 class Graph {
 public:
-	Graph();
+	Graph(std::vector<Node> &n, std::unordered_map<Edge, Flow> &e);
 	virtual ~Graph();
 
-	void add(Node);
-	void add(Flow);
-	void add(Action);
-
-	vector<Action> &actions();
-	map<Node *, double> getUtility(Action &);
-
-	void printState();
+	std::string state() const;
 
 private:
-	Node *getNode(string label);
-	vector<Flow> getOutgoing(Node &);
-	double getFeedback(Node &);
-	vector<double> getUtility(vector<double>, vector<double>);
+	std::vector<Node> nodes;
+	std::unordered_map<Edge, Flow> edges;
 
-	vector<Node> nodes;
-	vector<Flow> flows;
-	vector<Action> actions_list;
+	Node *getNode(std::string label);
+	std::vector<Flow> getOutgoing(Node &);
+	double getFeedback(Node &);
+	std::vector<double> getUtility(std::vector<double>, std::vector<double>);
+
+	std::vector<Flow> flows;
 };
 
-} /* namespace std */
+} /* namespace graph */
+
+namespace std {
+	
+std::string to_string(const graph::Graph &g);
+
+}
 
 #endif /* GRAPH_H_ */

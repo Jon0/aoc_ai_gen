@@ -21,8 +21,8 @@ public:
 	PerWriter();
 	virtual ~PerWriter();
 
-	void writeRule(ofstream &, map<Node *, double> &, Action &);
-	void write(string, shared_ptr<Graph>);
+	void writeRule(ofstream &, map<graph::Node *, double> &, Action &);
+	void write(string, shared_ptr<graph::Graph>);
 };
 
 } /* namespace std */

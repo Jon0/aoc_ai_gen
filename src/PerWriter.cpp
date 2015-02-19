@@ -15,8 +15,8 @@ namespace std {
 
 void readSpecFile(const char *f) {
 	Parser p(f);
-	shared_ptr<Graph> g = p.readGraph();
-	g->printState();
+	shared_ptr<graph::Graph> g = p.readGraph();
+	cout << to_string(*g.get()) << std::endl;
 
 	PerWriter w;
 	w.write("test.per", g);
@@ -26,7 +26,7 @@ PerWriter::PerWriter() {}
 
 PerWriter::~PerWriter() {}
 
-void PerWriter::writeRule(ofstream &ofs, map<Node *, double> &vals, Action &a) {
+void PerWriter::writeRule(ofstream &ofs, map<graph::Node *, double> &vals, Action &a) {
 	vector<Condition> cds;
 
 	//a->
@@ -44,13 +44,13 @@ void PerWriter::writeRule(ofstream &ofs, map<Node *, double> &vals, Action &a) {
 	ofs << ")" << endl;
 }
 
-void PerWriter::write(string fname, shared_ptr<Graph> g) {
+void PerWriter::write(string fname, shared_ptr<graph::Graph> g) {
 	ofstream ofs(fname);
 
-	for (Action &a: g->actions()) {
-		map<Node *, double> vals = g->getUtility(a);
-		writeRule(ofs, vals, a);
-	}
+	// for (Action &a: g->actions()) {
+	// 	map<graph::Node *, double> vals = g->getUtility(a);
+	// 	writeRule(ofs, vals, a);
+	// }
 }
 
 } /* namespace std */

@@ -18,41 +18,41 @@ Parser::Parser(string fname) {
 
 Parser::~Parser() {}
 
-shared_ptr<Graph> Parser::readGraph() {
+shared_ptr<graph::Graph> Parser::readGraph() {
 	Lex infile(filename);
 	tokens = infile.getTokens();
-	shared_ptr<Graph> g = make_shared<Graph>();
+	//shared_ptr<graph::Graph> g = make_shared<graph::Graph>();
 	while (!tokens.empty()) {
 		string &next = tokens.front();
 		if ( next == "node" ) {
-			g->add( readNode() );
+			//g->add( readNode() );
 		}
 		else if ( next == "flow" ) {
-			g->add( readFlow() );
+			//g->add( readFlow() );
 		}
 		else if ( next == "action" ) {
-			g->add( readAction() );
+			//g->add( readAction() );
 		}
 		else {
 			throw runtime_error("unrecognized token " + next);
 		}
 	}
-	return g;
+	//return g;
 }
 
-Node Parser::readNode() {
+graph::Node Parser::readNode() {
 	match("node");
-	Node n;
+	graph::Node n;
 	n.label = pop();
 	return n;
 }
 
-Flow Parser::readFlow() {
+graph::Flow Parser::readFlow() {
 	match("flow");
-	Flow f;
-	f.from = pop();
-	f.to = pop();
-	f.rate = popf();
+	graph::Flow f;
+	//f.from = pop();
+	//f.to = pop();
+	//f.rate = popf();
 	return f;
 }
 
